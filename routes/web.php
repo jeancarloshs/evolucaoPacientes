@@ -19,3 +19,6 @@ Route::get('/', function () {
 });
 
 Route::get('/pacientes', [PacientesController::class, 'index'])->name('pacientes.index');
+Route::get('/pacientes/{$id}', [PacientesController::class, 'show'])->name('pacientes.show');
+Route::get('/pacientes/insert', [PacientesController::class, 'insert'])->name('pacientes.insert');
+Route::post('/pacientes/save', [PacientesController::class, 'save'])->name('pacientes.save');
