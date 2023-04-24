@@ -11,6 +11,7 @@ class PacientesController extends Controller
     {
         $paciente = new Pacientes();
         $listaPaciente = Pacientes::get();
+        //dd($listaPaciente);
         $nomePaciente = $paciente->nome_paciente;
         //$roles = Pacientes::all('id')->toArray();
         $roles = Pacientes::pluck('id')->all();
@@ -27,9 +28,23 @@ class PacientesController extends Controller
         );
     }
 
-    public function show($id)
+    public function show(Request $request, $id)
     {
-        return view('pacientes.show');
+        $paciente = new Pacientes();
+        $listaPaciente = Pacientes::get();
+        //$listaPaciente = Pacientes::push();
+        $nomePaciente = $paciente->nome_paciente;
+        $roles = Pacientes::all('id')->toArray();
+        $roles = Pacientes::pluck('id')->all();
+
+        return view(
+            'pacientes.show',
+            [
+                'paciente' => $paciente,
+                'listaPaciente' => $listaPaciente,
+                'nomePaciente' => $nomePaciente,
+            ]
+        );
     }
 
     public function insert(Request $request)

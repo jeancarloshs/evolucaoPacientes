@@ -5,7 +5,7 @@
         <a href="/pacientes" class="btn btn-secondary me-md-2">Voltar</a>
     </div>
 
-    <form action="/pacientes/save" method="POST">
+    <form action="" method="">
         @csrf
 
         <div class="mb-3 col-sm-5 formInput formInput">
@@ -16,6 +16,7 @@
                 name="nome_paciente"
                 placeholder="Nome do Paciente"
                 class="form-control"
+                value="{{old('paciente', $listaPaciente->nome_paciente)}}"
                 min="3"
             >
         </div>
