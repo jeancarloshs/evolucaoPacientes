@@ -10,39 +10,31 @@ class PacientesController extends Controller
     public function index()
     {
         $paciente = new Pacientes();
+        $paciente = Pacientes::paginate(20);
         $listaPaciente = Pacientes::get();
-        //dd($listaPaciente);
-        $nomePaciente = $paciente->nome_paciente;
-        //$roles = Pacientes::all('id')->toArray();
-        $roles = Pacientes::pluck('id')->all();
 
-
-        //dd($teste);
         return view(
             'pacientes.index',
             [
                 'paciente' => $paciente,
                 'listaPaciente' => $listaPaciente,
-                'nomePaciente' => $nomePaciente,
             ]
         );
     }
 
-    public function show(Request $request, $id)
+    public function show($id)
     {
-        $paciente = new Pacientes();
-        $listaPaciente = Pacientes::get();
-        //$listaPaciente = Pacientes::push();
-        $nomePaciente = $paciente->nome_paciente;
-        $roles = Pacientes::all('id')->toArray();
-        $roles = Pacientes::pluck('id')->all();
+        $paciente = Pacientes::findOrFail($id);
+        $pacientesPaginados = Pacientes::paginate(20);
+        $listaPacientes = Pacientes::all();
+
 
         return view(
             'pacientes.show',
             [
                 'paciente' => $paciente,
-                'listaPaciente' => $listaPaciente,
-                'nomePaciente' => $nomePaciente,
+                'pacientesPaginados' => $pacientesPaginados,
+                'listaPacientes' => $listaPacientes,
             ]
         );
     }
@@ -52,26 +44,9 @@ class PacientesController extends Controller
         return view('pacientes.insert');
     }
 
-    public function save(Request $request)
+    public function save(Request $request, $id = NULL)
     {
         $paciente = new Pacientes();
-        //dd($paciente);
-        //dd($request->input('descricao_evolucao'));
-
-
-        //$nomePaciente = $request->input('nome');
-        // $rgPaciente = $request->input('rg');
-        // $cpfPaciente = $request->input('cpf');
-        // $dataNascimentoPaciente = $request->input('dn');
-        // $susPaciente = $request->input('sus');
-        // $enfResponsavel = $request->input('responsavel');
-        // $estadoPaciente = $request->input('estado');
-
-        // $paciente->save();
-
-        //return to_route('pacientes.insert')->with('mensagem.sucesso', 'Paciente ' . $nomePaciente . 'cadastrado com Sucesso!!!');
-        // return to_route('pacientes.insert');
-
 
         $data = [
             'nome_paciente' => request('nome_paciente'),
@@ -88,9 +63,52 @@ class PacientesController extends Controller
             'created_at' => request('created_at')
         ];
         Pacientes::create($data);
-        //dd($data);
-        //$paciente->save();
-        //return to_route('pacientes.insert')->with('mensagem.sucesso', 'Paciente ' . $nomePaciente . 'cadastrado com Sucesso!!!');
+
         return to_route('pacientes.index')->with('mensagem.sucesso');
     }
+
+
+    public function update(Request $request, $id = NULL)
+    {
+        $paciente = new Pacientes();
+        $paciente = Pacientes::find($id);
+        $updateInfo = $request->all();
+
+        $data = [
+            'nome_paciente' => request('nome_paciente'),
+            'rg' => request('rg'),
+            'cpf' => request('cpf'),
+            'data_nascimento' => request('data_nascimento'),
+            'idade' => request('idade'),
+            'sexo' => request('sexo'),
+            'cartao_sus' => request('cartao_sus'),
+            'estado_paciente' => request('estado_paciente'),
+            'responsavel' => request('responsavel'),
+            'descricao_evolucao' => request('descricao_evolucao'),
+            'updated_at' => request('updated_at'),
+        ];
+        //Pacientes::updated($data);
+
+        $paciente->fill($updateInfo);
+        $paciente->update($updateInfo);
+
+
+        return to_route('pacientes.index')->with('mensagem.sucesso');
+    }
+
+//     public function update(Request $request, $id)
+// {
+//     $paciente = Pacientes::find($id);
+
+//     // Atualizar os campos do paciente com os dados do formulário
+//     $paciente->nome_paciente = $request->input('nome_paciente');
+//     $paciente->idade_paciente = $request->input('idade_paciente');
+//     $paciente->estado_paciente = $request->input('estado_paciente');
+
+//     // Salvar as mudanças no banco de dados
+//     $paciente->save();
+
+//     // Redirecionar para a página de exibição do paciente atualizado
+//     return redirect()->route('pacientes.show', ['id' => $paciente->id]);
+// }
 }

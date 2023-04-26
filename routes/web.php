@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\PacientesController;
+use App\Models\Pacientes;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,11 +15,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [PacientesController::class, 'index']);
 
 Route::get('/pacientes', [PacientesController::class, 'index'])->name('pacientes.index');
-Route::get('/pacientes/{$id}', [PacientesController::class, 'show'])->name('pacientes.show');
 Route::get('/pacientes/insert', [PacientesController::class, 'insert'])->name('pacientes.insert');
+Route::get('/pacientes/{id}', [PacientesController::class, 'show'])->name('pacientes.show');
 Route::post('/pacientes/save', [PacientesController::class, 'save'])->name('pacientes.save');
+Route::put('/pacientes/{id}', [PacientesController::class, 'update'])->name('pacientes.update');
